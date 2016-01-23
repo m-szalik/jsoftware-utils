@@ -27,6 +27,7 @@ public abstract class ConcurrentLockHolderByKey<L> {
 	/**
 	 * Get lock or create new one
 	 * @param id id of lock
+	 * @return held object
 	 */
 	public final synchronized L get(Serializable id) {
 		LockHolder<L> lh = locks.get(id);
@@ -64,6 +65,7 @@ public abstract class ConcurrentLockHolderByKey<L> {
 	
 	/**
 	 * Create new {@link ConcurrentLockHolderByKey} for {@link ReadWriteLock} implemented by {@link ReentrantReadWriteLock}
+	 * @return an instance of holder
 	 */
 	public static ConcurrentLockHolderByKey<ReadWriteLock> newReadWriteLockHolder() {
 		return new ConcurrentLockHolderByKey<ReadWriteLock>() {

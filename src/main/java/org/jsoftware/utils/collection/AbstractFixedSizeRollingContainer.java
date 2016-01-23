@@ -13,8 +13,8 @@ import java.util.List;
  * Method {@link #fetchNew()} is used to get new elements if required.
  * <p>Elements can be <tt>null</tt>s if there is no more elements to get via {@link #fetchNew()} method.</p>
  * <p>This is not thread-safe class.</p>
+ * @param <T> the type of elements in this container
  * @author szalik
- * @param <T>
  */
 public abstract class AbstractFixedSizeRollingContainer<T> implements Serializable {
 	private static final long serialVersionUID = -3777873725549224549L;
@@ -23,6 +23,7 @@ public abstract class AbstractFixedSizeRollingContainer<T> implements Serializab
 
 
 	/**
+	 * @param size size of a container
 	 * @see AbstractFixedSizeRollingContainer
 	 */
 	@SuppressWarnings("unchecked")
@@ -77,7 +78,7 @@ public abstract class AbstractFixedSizeRollingContainer<T> implements Serializab
 
 
 	/**
-	 * @return @return length of container's elements without <tt>null</tt>s.
+	 * @return length of container's elements without <tt>null</tt>s.
 	 */
 	public int getActiveSize() {
 		init();

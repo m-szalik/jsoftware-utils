@@ -22,7 +22,9 @@ public class MimeTypeResolver implements Serializable {
 	private final String defaultMimeType;
 	private final Map<String,String> map;
 
-	
+	/**
+	 * @param defaultMimeType default mime type for this resolver - can be <code>null</code>
+	 */
 	public MimeTypeResolver(String defaultMimeType) {
 		this.defaultMimeType = defaultMimeType;
 		this.map = new HashMap<String, String>();
@@ -48,6 +50,7 @@ public class MimeTypeResolver implements Serializable {
 
 	/**
 	 * Create new instance with default value <tt>null</tt>.
+	 * @return an instance of resolver with no default type
 	 */
 	public static MimeTypeResolver newInstance() {
 		return new MimeTypeResolver(null);
@@ -55,6 +58,7 @@ public class MimeTypeResolver implements Serializable {
 	
 	/**
 	 * Create new instance with default value <code>application/octet-stream</code>.
+	 * @return an instance of resolver with default type <code>application/octet-stream</code>
 	 */
 	public static MimeTypeResolver newInstanceOctetStream() {
 		return new MimeTypeResolver("application/octet-stream");

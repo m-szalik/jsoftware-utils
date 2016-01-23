@@ -13,6 +13,7 @@ public class FixedSizeRollingList<E> implements List<E> {
 	private final int fixedSize;
 	
 	/**
+	 * @param fixedSize size of a container
 	 * @see FixedSizeRollingList
 	 */
 	public FixedSizeRollingList(int fixedSize) {
