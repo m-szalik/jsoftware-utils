@@ -2,7 +2,7 @@ package org.jsoftware.utils;
 
 
 import java.io.Serializable;
-import java.time.Clock;
+import java.time.Instant;
 import java.util.Collection;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -16,17 +16,14 @@ import java.util.stream.Collectors;
  */
 public class SimpleCache<K,V> implements Map<K,V> {
     private final long timeoutMillis;
-    private final Clock clock;
     private final LinkedHashMap<K,CacheEntry<V>> cacheMap;
 
     /**
      * @param timeoutMillis cache ttl im milliseconds
      * @param cacheSize cache size
-     * @param clock to get <code>now</code>
      */
-    protected SimpleCache(long timeoutMillis, int cacheSize, Clock clock) {
+    public SimpleCache(long timeoutMillis, int cacheSize) {
         this.timeoutMillis = timeoutMillis;
-        this.clock = clock;
         this.cacheMap = new LinkedHashMap() {
             @Override
             protected boolean removeEldestEntry(Map.Entry eldest) {
@@ -34,16 +31,6 @@ public class SimpleCache<K,V> implements Map<K,V> {
             }
         };
     }
-
-
-    /**
-     * @param timeoutMillis cache ttl im milliseconds
-     * @param size cache size
-     */
-    public SimpleCache(long timeoutMillis, int size) {
-        this(timeoutMillis, size, Clock.systemDefaultZone());
-    }
-
 
     @Override
     public int size() {
@@ -130,11 +117,15 @@ public class SimpleCache<K,V> implements Map<K,V> {
         if (ce == null) {
             return false;
         }
-        return ce.getTimeout() < clock.millis();
+        return ce.getTimeout() > now().toEpochMilli();
     }
 
     private CacheEntry<V> createEntry(V value) {
-        return new CacheEntry<>(clock.millis() + timeoutMillis, value);
+        return new CacheEntry<>(now().toEpochMilli() + timeoutMillis, value);
+    }
+
+    protected Instant now() {
+        return Instant.now();
     }
 
 }
