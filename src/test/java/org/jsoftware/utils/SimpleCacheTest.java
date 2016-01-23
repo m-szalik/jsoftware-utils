@@ -5,6 +5,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.time.Instant;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
  */
@@ -54,5 +55,30 @@ public class SimpleCacheTest {
         cache.put("x2", "a");
         cache.clear();
         Assert.assertTrue(cache.isEmpty());
+    }
+
+    @Test
+    public void testConcurrentAccess() throws Exception {
+        final AtomicBoolean state = new AtomicBoolean(false);
+        Thread t = new Thread(()->{
+            cache.fetch("x", ()-> {
+                state.set(true);
+                try {
+                    Thread.sleep(500);
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
+                }
+                return Thread.currentThread().getName();
+            });
+        });
+
+        t.start();
+        while(! state.get()) {
+            Thread.sleep(5);
+        }
+        Object r = cache.fetch("x", () -> {
+            return Thread.currentThread().getName();
+        });
+        Assert.assertEquals(t.getName(), r);
     }
 }

@@ -1,12 +1,14 @@
 package org.jsoftware.utils;
 
 
-import java.io.Serializable;
 import java.time.Instant;
 import java.util.Collection;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReadWriteLock;
+import java.util.concurrent.locks.ReentrantReadWriteLock;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
@@ -65,7 +67,8 @@ public class SimpleCache<K,V> implements Map<K,V> {
 
     @Override
     public V put(K key, V value) {
-        CacheEntry<V> ce = cacheMap.put(key, createEntry(value));
+        CacheEntry<V> ce = createOrGetEntry(key);
+        ce.put(now().toEpochMilli() + timeoutMillis, value);
         return isValid(ce) ? ce.getValue() : null;
     }
 
@@ -78,7 +81,8 @@ public class SimpleCache<K,V> implements Map<K,V> {
     @Override
     public void putAll(Map<? extends K, ? extends V> m) {
         m.entrySet().forEach(me -> {
-            cacheMap.put(me.getKey(), createEntry(me.getValue()));
+            CacheEntry<V> ce = createOrGetEntry(me.getKey());
+            ce.put(now().toEpochMilli() + timeoutMillis, me.getValue());
         });
     }
 
@@ -102,14 +106,19 @@ public class SimpleCache<K,V> implements Map<K,V> {
         throw new NotImplementedException();
     }
 
+    /**
+     * Thread-safe method fetching cache object
+     * @param key cache key
+     * @param supplier object supplier
+     * @return object form cache or produced by supplier
+     */
     public V fetch(K key, Supplier<V> supplier) {
-        CacheEntry<V> ce = cacheMap.get(key);
+        CacheEntry<V> ce = createOrGetEntry(key);
         if (isValid(ce)) {
             return ce.getValue();
         } else {
-            V v = supplier.get();
-            cacheMap.put(key, createEntry(v));
-            return v;
+            ce.updateValue(now().toEpochMilli() + timeoutMillis, supplier);
+            return ce.getValue();
         }
     }
 
@@ -120,8 +129,15 @@ public class SimpleCache<K,V> implements Map<K,V> {
         return ce.getTimeout() > now().toEpochMilli();
     }
 
-    private CacheEntry<V> createEntry(V value) {
-        return new CacheEntry<>(now().toEpochMilli() + timeoutMillis, value);
+    private CacheEntry<V> createOrGetEntry(K key) {
+        synchronized (cacheMap) {
+            CacheEntry<V> ce = cacheMap.get(key);
+            if (ce == null) {
+                ce = new CacheEntry<>();
+                cacheMap.put(key, ce);
+            }
+            return ce;
+        }
     }
 
     protected Instant now() {
@@ -133,21 +149,37 @@ public class SimpleCache<K,V> implements Map<K,V> {
 
 
 
-class CacheEntry<V> implements Serializable {
-    private final long timeout;
-    private final V value;
-
-    CacheEntry(long timeout, V value) {
-        this.timeout = timeout;
-        this.value = value;
-    }
+class CacheEntry<V> {
+    private final ReadWriteLock readWriteLock = new ReentrantReadWriteLock();
+    private volatile long timeout = Long.MIN_VALUE;
+    private volatile V value;
 
     public long getTimeout() {
         return timeout;
     }
 
     public V getValue() {
-        return value;
+        Lock rl = this.readWriteLock.readLock();
+        rl.lock();
+        try {
+            return value;
+        } finally {
+            rl.unlock();
+        }
+    }
+
+    public void updateValue(long timeout, Supplier<V> supplier) {
+        Lock wl = this.readWriteLock.writeLock();
+        if (! wl.tryLock()) {
+            throw new IllegalStateException();
+        }
+        try {
+            this.value = null;
+            this.timeout = timeout;
+            this.value = supplier.get();
+        } finally {
+            wl.unlock();
+        }
     }
 
     @Override
@@ -159,8 +191,8 @@ class CacheEntry<V> implements Serializable {
 
     }
 
-    @Override
-    public int hashCode() {
-        return value != null ? value.hashCode() : 0;
+    public void put(long timeout, V value) {
+        this.timeout = timeout;
+        this.value = value;
     }
 }
