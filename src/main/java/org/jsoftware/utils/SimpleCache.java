@@ -63,7 +63,7 @@ public class SimpleCache<K,V> implements Map<K,V> {
     @Override
     public V put(K key, V value) {
         CacheEntry<V> ce = createOrGetEntry(key);
-        ce.put(now().toEpochMilli() + timeoutMillis, value);
+        ce.put(entryTimeout(), value);
         return isValid(ce) ? ce.getValue() : null;
     }
 
@@ -77,7 +77,7 @@ public class SimpleCache<K,V> implements Map<K,V> {
     public void putAll(Map<? extends K, ? extends V> m) {
         m.entrySet().forEach(me -> {
             CacheEntry<V> ce = createOrGetEntry(me.getKey());
-            ce.put(now().toEpochMilli() + timeoutMillis, me.getValue());
+            ce.put(entryTimeout(), me.getValue());
         });
     }
 
@@ -112,7 +112,7 @@ public class SimpleCache<K,V> implements Map<K,V> {
         if (isValid(ce)) {
             return ce.getValue();
         } else {
-            ce.updateValue(now().toEpochMilli() + timeoutMillis, supplier);
+            ce.updateValue(entryTimeout(), supplier);
             return ce.getValue();
         }
     }
@@ -133,6 +133,10 @@ public class SimpleCache<K,V> implements Map<K,V> {
             }
             return ce;
         }
+    }
+
+    private long entryTimeout() {
+        return now().toEpochMilli() + timeoutMillis;
     }
 
     protected Instant now() {
