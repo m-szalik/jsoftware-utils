@@ -58,7 +58,7 @@ public class SimpleCacheTest {
     }
 
     @Test
-    public void testConcurrentAccess() throws Exception {
+    public void testConcurrentAccessTheSameKey() throws Exception {
         final AtomicBoolean state = new AtomicBoolean(false);
         Thread t = new Thread(()->{
             cache.fetch("x", ()-> {
@@ -76,9 +76,37 @@ public class SimpleCacheTest {
         while(! state.get()) {
             Thread.sleep(5);
         }
-        Object r = cache.fetch("x", () -> {
-            return Thread.currentThread().getName();
-        });
+        Object r = cache.fetch("x", () -> Thread.currentThread().getName());
         Assert.assertEquals(t.getName(), r);
+    }
+
+    @Test
+    public void testConcurrentAccessDifferentKeys() throws Exception {
+        final AtomicBoolean state = new AtomicBoolean(false);
+        final StringBuilder tOut = new StringBuilder();
+        Thread t = new Thread(()->{
+            String str = (String) cache.fetch("a", ()-> {
+                state.set(true);
+                try {
+                    Thread.sleep(500);
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
+                }
+                return Thread.currentThread().getName();
+            });
+            tOut.append(str);
+        });
+
+        t.start();
+        while(! state.get()) {
+            Thread.sleep(5);
+        }
+        long ts = System.currentTimeMillis();
+        Object r = cache.fetch("b", () -> Thread.currentThread().getName());
+        ts = System.currentTimeMillis() - ts;
+        t.join();
+        Assert.assertEquals(Thread.currentThread().getName(), r);
+        Assert.assertEquals(t.getName(), tOut.toString());
+        Assert.assertTrue("Too long", ts < 500); // less then 500ms
     }
 }
