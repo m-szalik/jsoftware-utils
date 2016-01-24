@@ -12,16 +12,14 @@ public class RegexReplacerTest {
     @Test
     public void testReplace1() throws Exception {
         RegexReplacer replacer = new RegexReplacer(Pattern.compile("([a-f])"));
-        String result;
-        result = replacer.replaceGroupsAll("Aaf123ffZ", function);
+        String result = replacer.replaceGroupsAll("Aaf123ffZ", function);
         Assert.assertEquals("A<a><f>123<f><f>Z", result);
     }
 
     @Test
     public void testReplace2() throws Exception {
         RegexReplacer replacer = new RegexReplacer(Pattern.compile("(.)"));
-        String result;
-        result = replacer.replaceGroupsAll("abc", function);
+        String result = replacer.replaceGroupsAll("abc", function);
         Assert.assertEquals("<a><b><c>", result);
     }
 
@@ -33,8 +31,7 @@ public class RegexReplacerTest {
            the last thing it will try matching against is 1 or 0 characters.
         */
         RegexReplacer replacer = new RegexReplacer(Pattern.compile(".*foo")); // greedy quantifier
-        String result;
-        result = replacer.replaceGroupsAll("afoobarfoo", function);
+        String result = replacer.replaceGroupsAll("afoobarfoo", function);
         Assert.assertEquals("<afoobarfoo>", result);
     }
 
@@ -44,8 +41,7 @@ public class RegexReplacerTest {
            then reluctantly eat one character at a time looking for a match. The last thing they try is the entire input string.
         */
         RegexReplacer replacer = new RegexReplacer(Pattern.compile(".*?foo")); // reluctant quantifier
-        String result;
-        result = replacer.replaceGroupsAll("afoobarfoo", function);
+        String result = replacer.replaceGroupsAll("afoobarfoo", function);
         Assert.assertEquals("<afoo><barfoo>", result);
     }
 
@@ -55,8 +51,7 @@ public class RegexReplacerTest {
            possessive quantifiers never back off, even if doing so would allow the overall match to succeed.
         */
         RegexReplacer replacer = new RegexReplacer(Pattern.compile(".*+foo")); // possessive quantifier
-        String result;
-        result = replacer.replaceGroupsAll("afoobarfoo", function);
+        String result = replacer.replaceGroupsAll("afoobarfoo", function);
         Assert.assertEquals("afoobarfoo", result);
     }
 
