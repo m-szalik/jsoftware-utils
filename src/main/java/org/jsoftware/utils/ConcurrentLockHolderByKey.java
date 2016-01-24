@@ -75,8 +75,6 @@ public abstract class ConcurrentLockHolderByKey<L> {
 			}
 		};
 	}
-	
-	
 }
 
 

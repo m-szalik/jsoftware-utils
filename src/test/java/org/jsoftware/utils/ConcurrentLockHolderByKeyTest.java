@@ -5,14 +5,16 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.util.LinkedList;
-import java.util.Queue;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReadWriteLock;
 
 public class ConcurrentLockHolderByKeyTest {
-
 	private ConcurrentLockHolderByKey<ReadWriteLock> instance;
 	private ThreadLock threadLock;
 	
@@ -30,14 +32,15 @@ public class ConcurrentLockHolderByKeyTest {
 	}
 	
 	@Test // TRUE
-	public void upgradeReadToWriteLock() {
+	public void downgradingToReadLock() {
 		ReadWriteLock rwLock = instance.get("A");
-		rwLock.readLock().tryLock();
-		rwLock.writeLock().tryLock();
+		Assert.assertTrue(rwLock.writeLock().tryLock());
+		Assert.assertTrue(rwLock.readLock().tryLock());
 	}
-	
+
+
 	@Test // FALSE
-	public void writeLockedTryRead() throws InterruptedException {
+	public void writeLockedTryRead() throws InterruptedException, ExecutionException {
 		ReadWriteLock rwLock = instance.get("A");
 		threadLock.tryLock(rwLock.writeLock());
 		Assert.assertFalse(rwLock.readLock().tryLock());
@@ -45,14 +48,14 @@ public class ConcurrentLockHolderByKeyTest {
 	
 
 	@Test // FALSE
-	public void readLockedTryWrite() throws InterruptedException {
+	public void readLockedTryWrite() throws InterruptedException, ExecutionException {
 		ReadWriteLock rwLock = instance.get("A");
 		threadLock.tryLock(rwLock.readLock());
 		Assert.assertFalse(rwLock.writeLock().tryLock());
 	}
 	
 	@Test // TRUE
-	public void readLockedTryRead() throws InterruptedException {
+	public void readLockedTryRead() throws InterruptedException, ExecutionException {
 		ReadWriteLock rwLock = instance.get("A");
 		threadLock.tryLock(rwLock.readLock());
 		Assert.assertTrue(rwLock.readLock().tryLock());
@@ -82,79 +85,38 @@ public class ConcurrentLockHolderByKeyTest {
 }
 
 
-class ThreadLock extends Thread {
-	private final Queue<Runnable> tasks;
-	private volatile boolean stop;
-	
-	public ThreadLock() {
-		super();
-		start();
-        tasks = new LinkedList<Runnable>();
-    }
-	
-	public void tryLock(final Lock lock) throws InterruptedException {
-		add(new Runnable() {
-			@Override
-			public void run() {
-				boolean b = lock.tryLock();
-				Assert.assertTrue(b);
-			}
-		});
+class ThreadLock {
+	private final ExecutorService executorService = Executors.newSingleThreadExecutor();
+
+	public Boolean tryLock(final Lock lock) throws InterruptedException, ExecutionException {
+		return add(() -> {
+            boolean b = lock.tryLock();
+			return b;
+        });
 	}
 	
-	public void tryLock(final Lock lock, final long milis) throws InterruptedException {
-		add(new Runnable() {
-			@Override
-			public void run() {
-				try {
-					lock.tryLock(milis, TimeUnit.MICROSECONDS);
-				} catch (InterruptedException e) {
-					/* ignore */
-				}
-			}
-		});
+	public Boolean tryLock(final Lock lock, final long milis) throws InterruptedException, ExecutionException {
+		return add(() -> {
+            try {
+                return lock.tryLock(milis, TimeUnit.MICROSECONDS);
+            } catch (InterruptedException e) {
+                /* ignore */
+				return false;
+            }
+        });
 	}
 	
-	public void unlock(final Lock lock) throws InterruptedException {
-		add(new Runnable() {
-			@Override
-			public void run() {
-				lock.unlock();
-			}
-		});
+	public void unlock(final Lock lock) throws InterruptedException, ExecutionException {
+		add(() -> { lock.unlock(); return true; });
 	}
 	
-	private void add(Runnable runnable) throws InterruptedException {
-		synchronized (tasks) {
-			tasks.add(runnable);
-			tasks.notify();
-		}
-		synchronized (runnable) {
-			runnable.wait();	// firebug ok 
-		}
+	private Boolean add(Callable<Boolean> callable) throws InterruptedException, ExecutionException {
+		Future<Boolean> f = executorService.submit(callable);
+		return f.get();
 	}
 
-	@Override
-	public void run() {
-		while(! stop) {
-			synchronized (tasks) {
-				Runnable r = tasks.poll();
-				if (r != null) {
-					r.run();
-					synchronized (r) {
-						r.notifyAll();	// firebug ok 
-					}
-				}
-				try {
-					tasks.wait(20);
-				} catch (InterruptedException e) {
-					/* ignore */
-				}
-			}
-		}
-	}
 	
 	public void stopThread() {
-		this.stop = true;
+		executorService.shutdownNow();
 	}
 }
