@@ -33,7 +33,6 @@
         <url>https://github.com/m-szalik/jsoftware-utils.git</url>
         <connection>scm:git:git@github.com:m-szalik/jsoftware-utils.git</connection>
         <developerConnection>scm:git:git@github.com:m-szalik/jsoftware-utils.git</developerConnection>
-      <tag>HEAD</tag>
   </scm>
 
     <issueManagement>
