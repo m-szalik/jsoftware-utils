@@ -56,12 +56,12 @@ public class FixedSizeRollingList<E> implements List<E> {
 		return list.remove(o);
 	}
 
-	public boolean containsAll(Collection<?> c) {
-		return list.containsAll(c);
+	public boolean containsAll(Collection<?> collection) {
+		return list.containsAll(collection);
 	}
 
-	public boolean addAll(Collection<? extends E> c) {
-		for(E e : c) {
+	public boolean addAll(Collection<? extends E> collection) {
+		for(E e : collection) {
 			add(e);
 		}
 		return true;
