@@ -207,6 +207,6 @@ class SimpleCacheMap<K,V> extends LinkedHashMap<K,V> {
 
     @Override
     protected boolean removeEldestEntry(Map.Entry eldest) {
-        return this.size() >= cacheSize;
+        return this.size() > cacheSize;
     }
 }

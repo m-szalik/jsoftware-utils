@@ -40,8 +40,7 @@ public class TestClockTest {
         TestClock utcPlus4TestClock = clock.withZone(zoneId);
         LocalDateTime local1 = LocalDateTime.now(clock);
         LocalDateTime local2 = LocalDateTime.now(utcPlus4TestClock);
-        long hrsDiff = local2.getHour() - local1.getHour();
-        Assert.assertSame(zoneId, utcPlus4TestClock.getZone());
-        Assert.assertEquals(4, hrsDiff);
+        LocalDateTime local1Normalized = local1.plus(4, ChronoUnit.HOURS);
+        Assert.assertEquals(local1Normalized, local2);
     }
 }

@@ -52,5 +52,9 @@ public class FixedSizeRollingListTest {
 		Assert.assertEquals(0, list.size());
 	}
 
-
+	@Test
+	public void testIndexOf() throws Exception {
+		int index = list.indexOf(2);
+		Assert.assertEquals(1, index);
+	}
 }

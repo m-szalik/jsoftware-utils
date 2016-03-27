@@ -53,4 +53,13 @@ public class TimeWatchTest {
         clock.update(clock.instant().plus(2, ChronoUnit.SECONDS));
         Assert.assertEquals(TimeUnit.SECONDS.toMillis(2), timeWatch.getDuration());
     }
+
+    @Test
+    public void testRealTest() throws Exception {
+        TimeWatch timeWatch = new TimeWatch();
+        Thread.sleep(600);
+        long ts = timeWatch.getDuration();
+        Assert.assertTrue(ts >= 600);
+        Assert.assertTrue(ts < 800);
+    }
 }

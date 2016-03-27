@@ -1,10 +1,14 @@
 package org.jsoftware.utils;
 
+import org.hamcrest.CoreMatchers;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
 import java.time.Instant;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
@@ -108,5 +112,30 @@ public class SimpleCacheTest {
         Assert.assertEquals(Thread.currentThread().getName(), r);
         Assert.assertEquals(t.getName(), tOut.toString());
         Assert.assertTrue("Too long", ts < 500); // less then 500ms
+    }
+
+    @Test
+    public void testPutAllAndContains() throws Exception {
+        Map<Object,Object> map = new HashMap<>();
+        map.put(0, "zero");
+        map.put(1, "one");
+        map.put(2, "two");
+        cache.putAll(map);
+        Assert.assertTrue(cache.containsValue("one"));
+        Assert.assertTrue(cache.containsKey(0));
+        Assert.assertFalse(cache.containsKey(10));
+        Assert.assertFalse(cache.containsValue("xyz"));
+    }
+
+    @Test
+    public void testRemoveEntriesOverSize() throws Exception {
+        for(int i=0; i<5; i++) {
+            cache.put(i, Integer.toBinaryString(i));
+        }
+        Set<Object> keys = cache.keySet();
+        Assert.assertEquals(3, keys.size());
+        Assert.assertThat(keys, CoreMatchers.hasItem(4));
+        Assert.assertThat(keys, CoreMatchers.hasItem(3));
+        Assert.assertThat(keys, CoreMatchers.hasItem(2));
     }
 }
