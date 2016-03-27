@@ -1,7 +1,5 @@
 package org.jsoftware.utils.collection;
 
-import com.sun.istack.internal.NotNull;
-
 import java.io.Serializable;
 import java.util.LinkedList;
 import java.util.List;
@@ -28,7 +26,7 @@ public class FixedSizeRollingContainer<T> implements Serializable {
 	 * @see FixedSizeRollingContainer
 	 */
 	@SuppressWarnings("unchecked")
-	public FixedSizeRollingContainer(int size, @NotNull Supplier<T> supplier) {
+	public FixedSizeRollingContainer(int size, Supplier<T> supplier) {
 		if (size < 2) {
 			throw new IllegalArgumentException("Argument size must be 2 or more.");
 		}

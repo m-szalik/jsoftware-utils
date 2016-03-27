@@ -1,6 +1,10 @@
 package org.jsoftware.utils.collection;
 
-import java.util.*;
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.ListIterator;
 
 /**
  * {@link List} that always holds max <tt>fixedSize</tt> of elements <tt>E</tt> if more elements added the first one is automatically removed from {@link List}.
