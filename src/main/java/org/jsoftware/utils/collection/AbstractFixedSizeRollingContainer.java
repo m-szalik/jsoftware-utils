@@ -107,14 +107,16 @@ public abstract class AbstractFixedSizeRollingContainer<T> implements Serializab
 
 
 	/**
-	 * Switch elements between positions 
-	 * @param dstInd destination index
-	 * @param srcInd source index
+	 * Swap elements
+	 * @param index0 index of element to swap
+	 * @param index1 index of element to swap
 	 */
-	public void switchWith(int dstInd, int srcInd) {
+	public void swap(int index0, int index1) {
 		init();
-		T t = get(srcInd);
-		objects[dstInd] = t;
+		T t0 = get(index0);
+		T t1 = get(index1);
+		objects[index1] = t0;
+		objects[index0] = t1;
 	}
 
 	

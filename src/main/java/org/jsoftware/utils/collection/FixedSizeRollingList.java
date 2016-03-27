@@ -134,7 +134,7 @@ public class FixedSizeRollingList<E> implements List<E> {
 	 */
 	@Override
 	public String toString() {
-		return list.toString();
+		return getClass().getSimpleName() + "[fixedSize:" + fixedSize + "]";
 	}
 
 }
