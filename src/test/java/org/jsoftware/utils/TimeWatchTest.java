@@ -61,6 +61,6 @@ public class TimeWatchTest {
         Thread.sleep(600);
         long ts = timeWatch.getDuration();
         Assert.assertTrue(ts >= 600);
-        Assert.assertTrue(ts < System.currentTimeMillis() - t);
+        Assert.assertTrue(ts <= System.currentTimeMillis() - t);
     }
 }
