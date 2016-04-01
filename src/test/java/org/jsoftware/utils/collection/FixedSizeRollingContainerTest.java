@@ -83,4 +83,14 @@ public class FixedSizeRollingContainerTest {
 		List<Integer> list = container.getAsList();
 		Assert.assertArrayEquals(new Integer[] {0, 1, 2}, list.toArray(new Integer[list.size()]));
 	}
+
+	@Test(expected = IndexOutOfBoundsException.class)
+	public void testGetOutOfRange1() throws Exception {
+		container.get(-1);
+	}
+
+	@Test(expected = IndexOutOfBoundsException.class)
+	public void testGetOutOfRange2() throws Exception {
+		container.get(3);
+	}
 }

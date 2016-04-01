@@ -65,11 +65,16 @@ public class FixedSizeRollingContainer<T> implements Serializable {
 	}
 
 
-
+	/**
+	 * Get element at index
+	 * @param index index
+	 * @return an element
+	 * @throws IndexOutOfBoundsException if index is less then zero or equal or more then <tt>size</tt>.
+	 */
 	public T get(int index) {
 		init();
 		if (index < 0 || index >= objects.length) {
-			return null;
+			throw new IndexOutOfBoundsException("Index " + index + " is not between <0;" + (objects.length-1) + ">.");
 		}
 		return (T) objects[index];
 	}
