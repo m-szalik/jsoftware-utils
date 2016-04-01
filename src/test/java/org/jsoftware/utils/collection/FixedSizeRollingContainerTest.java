@@ -23,6 +23,16 @@ public class FixedSizeRollingContainerTest {
 		});
 	}
 
+	@Test(expected = IllegalArgumentException.class)
+	public void testIllegalArgumentNoSupplier() throws Exception {
+		new FixedSizeRollingContainer<Object>(10, null);
+	}
+
+	@Test(expected = IllegalArgumentException.class)
+	public void testIllegalArgumentSizeLessThenTwo() throws Exception {
+		new FixedSizeRollingContainer<Object>(1, null);
+	}
+
 	@Test
 	public void contentTest() {
 		List<Integer> list = container.getAsList();

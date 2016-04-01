@@ -28,7 +28,7 @@ public class FixedSizeRollingContainer<T> implements Serializable {
 	@SuppressWarnings("unchecked")
 	public FixedSizeRollingContainer(int size, Supplier<T> supplier) {
 		if (size < 2) {
-			throw new IllegalArgumentException("Argument size must be 2 or more.");
+			throw new IllegalArgumentException("Argument size must be equal to 2 or more.");
 		}
 		if (supplier == null) {
 			throw new IllegalArgumentException("Supplier cannot be null!");
