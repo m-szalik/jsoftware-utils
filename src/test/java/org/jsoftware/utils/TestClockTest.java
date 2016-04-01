@@ -4,6 +4,7 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.time.Clock;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
@@ -44,4 +45,17 @@ public class TestClockTest {
         Assert.assertSame(zoneId, utcPlus4TestClock.getZone());
         Assert.assertEquals(4, hrsDiff);
     }
+
+    @Test
+    public void testTimeZoneSameZone() throws Exception {
+        ZoneId zoneId = clock.getZone();
+        Clock clock2 = clock.withZone(zoneId);
+        Assert.assertEquals(zoneId, clock2.getZone());
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void testUpdateNull() throws Exception {
+        clock.update(null);
+    }
+
 }

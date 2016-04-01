@@ -53,4 +53,12 @@ public class TimeWatchTest {
         clock.update(clock.instant().plus(2, ChronoUnit.SECONDS));
         Assert.assertEquals(TimeUnit.SECONDS.toMillis(2), timeWatch.getDuration());
     }
+
+    @Test
+    public void testToString() throws Exception {
+        TimeWatch tw = new TimeWatch();
+        Thread.sleep(1010);
+        String str = tw.toString();
+        Assert.assertTrue(str.matches("\\d{4}ms.+"));
+    }
 }
