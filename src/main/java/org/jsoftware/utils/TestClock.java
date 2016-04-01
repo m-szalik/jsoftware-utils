@@ -49,6 +49,9 @@ public class TestClock extends Clock {
      * @param instant new clock time
      */
     public void update(Instant instant) {
+        if (instant == null) {
+            throw new IllegalArgumentException("Instant cannot be null.");
+        }
         this.instant = instant;
     }
 
