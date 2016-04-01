@@ -34,9 +34,11 @@ public final class TimeWatch {
 
     /**
      * Stop measurements.
+     * @return period in ms
      */
-    public void stop() {
+    public long stop() {
         t2 = clock.millis();
+        return t2 - t1;
     }
 
     /**

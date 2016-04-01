@@ -55,6 +55,16 @@ public class TimeWatchTest {
     }
 
     @Test
+    public void testRealTest() throws Exception {
+        long t = System.currentTimeMillis();
+        TimeWatch timeWatch = new TimeWatch();
+        Thread.sleep(600);
+        long ts = timeWatch.getDuration();
+        Assert.assertTrue(ts >= 600);
+        Assert.assertTrue(ts <= System.currentTimeMillis() - t);
+    }
+
+    @Test
     public void testToString() throws Exception {
         TimeWatch tw = new TimeWatch();
         Thread.sleep(1010);

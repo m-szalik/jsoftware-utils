@@ -1,38 +1,40 @@
 package org.jsoftware.utils.collection;
 
 import java.io.Serializable;
-import java.lang.reflect.Array;
-import java.lang.reflect.ParameterizedType;
-import java.util.Arrays;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.function.Supplier;
 
 
 /**
  * Container that always holds <tt>size</tt> number of elements.
  * Elements can be removed by {@link #shift()} method.
- * Method {@link #fetchNew()} is used to get new elements if required.
- * <p>Elements can be <tt>null</tt>s if there is no more elements to get via {@link #fetchNew()} method.</p>
  * <p>This is not thread-safe class.</p>
  * @param <T> the type of elements in this container
  * @author szalik
  */
-public abstract class AbstractFixedSizeRollingContainer<T> implements Serializable {
+public class FixedSizeRollingContainer<T> implements Serializable {
 	private static final long serialVersionUID = -3777873725549224549L;
-	private T[] objects;
-	private boolean inited;
+	private final Object[] objects;
+	private final Supplier<T> supplier;
+	private boolean initFinished;
 
 
 	/**
 	 * @param size size of a container
-	 * @see AbstractFixedSizeRollingContainer
+	 * @param supplier used to fetch new object whenever it is needed.
+	 * @see FixedSizeRollingContainer
 	 */
 	@SuppressWarnings("unchecked")
-	public AbstractFixedSizeRollingContainer(int size) {
+	public FixedSizeRollingContainer(int size, Supplier<T> supplier) {
 		if (size < 2) {
 			throw new IllegalArgumentException("Argument size must be 2 or more.");
 		}
-		Class<?> parametrizedClass = (Class<?>) ((ParameterizedType) getClass().getGenericSuperclass()).getActualTypeArguments()[0]; // so this is class of "T"
-		objects = (T[]) Array.newInstance(parametrizedClass, size); // array of "T"
+		if (supplier == null) {
+			throw new IllegalArgumentException("Supplier cannot be null!");
+		}
+		this.supplier = supplier;
+		this.objects = new Object[size];
 	}
 
 
@@ -40,12 +42,16 @@ public abstract class AbstractFixedSizeRollingContainer<T> implements Serializab
 	 * Must be invoked 
 	 */
 	private void init() {
-		if (! inited) {
+		if (!initFinished) {
 			for (int i = 0; i < objects.length; i++) {
 				objects[i] = fetchNew();
 			}
-			inited = true;
+			initFinished = true;
 		}
+	}
+
+	private T fetchNew() {
+		return supplier.get();
 	}
 
 
@@ -65,7 +71,7 @@ public abstract class AbstractFixedSizeRollingContainer<T> implements Serializab
 		if (index < 0 || index >= objects.length) {
 			return null;
 		}
-		return objects[index];
+		return (T) objects[index];
 	}
 
 
@@ -83,8 +89,8 @@ public abstract class AbstractFixedSizeRollingContainer<T> implements Serializab
 	public int getActiveSize() {
 		init();
 		int a = 0;
-		for (T t : objects) {
-			if (t != null) {
+		for (Object obj : objects) {
+			if (obj != null) {
 				a++;
 			}
 		}
@@ -107,14 +113,16 @@ public abstract class AbstractFixedSizeRollingContainer<T> implements Serializab
 
 
 	/**
-	 * Switch elements between positions 
-	 * @param dstInd destination index
-	 * @param srcInd source index
+	 * Swap elements
+	 * @param index0 index of element to swap
+	 * @param index1 index of element to swap
 	 */
-	public void switchWith(int dstInd, int srcInd) {
+	public void swap(int index0, int index1) {
 		init();
-		T t = get(srcInd);
-		objects[dstInd] = t;
+		T t0 = get(index0);
+		T t1 = get(index1);
+		objects[index1] = t0;
+		objects[index0] = t1;
 	}
 
 	
@@ -124,14 +132,11 @@ public abstract class AbstractFixedSizeRollingContainer<T> implements Serializab
 	 */
 	public List<T> getAsList() {
 		init();
-		return Arrays.asList(objects);
+		LinkedList<T> list = new LinkedList<>();
+		for(Object o : objects) {
+			list.add((T) o);
+		}
+		return list;
 	}
-
-
-	/**
-	 * Fetch new element when it is needed.
-	 * @return new element
-	 */
-	protected abstract T fetchNew();
 
 }

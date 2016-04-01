@@ -6,21 +6,21 @@ import org.junit.Test;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.function.Supplier;
 
 public class FixedSizeRollingContainerTest {
 
-	private AbstractFixedSizeRollingContainer<Integer> container;
+	private FixedSizeRollingContainer<Integer> container;
 
 	@Before
 	public void init() {
-		container = new AbstractFixedSizeRollingContainer<Integer>(3) {
-			private static final long serialVersionUID = -1322807402985281202L;
+		container = new FixedSizeRollingContainer<Integer>(3, new Supplier<Integer>() {
 			private int i = 0;
 			@Override
-			protected Integer fetchNew() {
+			public Integer get() {
 				return i++;
 			}
-		};
+		});
 	}
 
 	@Test
@@ -38,4 +38,39 @@ public class FixedSizeRollingContainerTest {
         List<Integer> list = container.getAsList();
         Assert.assertEquals(Arrays.asList(2, 3, 4), list);
     }
+
+	@Test
+	public void testActiveSize() throws Exception {
+		Assert.assertEquals(3, container.getActiveSize());
+		container.replaceWithNew(1);
+		Assert.assertEquals(3, container.getActiveSize());
+	}
+
+	@Test
+	public void testReplace() throws Exception {
+		Assert.assertEquals(Integer.valueOf(0), container.get(0));
+		Assert.assertEquals(Integer.valueOf(1), container.get(1));
+		Assert.assertEquals(Integer.valueOf(2), container.get(2));
+		container.replaceWithNew(1);
+		Assert.assertEquals(Integer.valueOf(0), container.get(0));
+		Assert.assertEquals(Integer.valueOf(3), container.get(1));
+		Assert.assertEquals(Integer.valueOf(2), container.get(2));
+	}
+
+	@Test
+	public void testSwap() throws Exception {
+		Assert.assertEquals(Integer.valueOf(0), container.get(0));
+		Assert.assertEquals(Integer.valueOf(1), container.get(1));
+		Assert.assertEquals(Integer.valueOf(2), container.get(2));
+		container.swap(2, 0);
+		Assert.assertEquals(Integer.valueOf(2), container.get(0));
+		Assert.assertEquals(Integer.valueOf(1), container.get(1));
+		Assert.assertEquals(Integer.valueOf(0), container.get(2));
+	}
+
+	@Test
+	public void testAsList() throws Exception {
+		List<Integer> list = container.getAsList();
+		Assert.assertArrayEquals(new Integer[] {0, 1, 2}, list.toArray(new Integer[list.size()]));
+	}
 }
