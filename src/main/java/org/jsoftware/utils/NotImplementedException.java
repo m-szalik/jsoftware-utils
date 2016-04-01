@@ -5,15 +5,14 @@ package org.jsoftware.utils;
  * @author szalik
  */
 public class NotImplementedException extends RuntimeException {
+	static final String DEFAULT_MESSAGE = "Not implemented";
 	private static final long serialVersionUID = 2281311197226328461L;
 
-
 	public NotImplementedException() {
-		super();
+		super(DEFAULT_MESSAGE);
 	}
 
-
 	public NotImplementedException(String message) {
-		super(message);
+		super(message == null ? DEFAULT_MESSAGE : message);
 	}
 }
