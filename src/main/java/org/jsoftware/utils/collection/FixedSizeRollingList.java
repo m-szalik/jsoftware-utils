@@ -88,6 +88,9 @@ public class FixedSizeRollingList<E> implements List<E> {
 	}
 
 	public boolean equals(Object o) {
+		if (o == this) {
+			return true;
+		}
 		return list.equals(o);
 	}
 
