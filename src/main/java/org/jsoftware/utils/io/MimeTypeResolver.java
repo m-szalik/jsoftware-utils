@@ -76,7 +76,7 @@ public class MimeTypeResolver implements Serializable {
 	/**
 	 * Get content-type by filename extension
 	 * @param filename or extension (example: abc.txt or txt)
-	 * @return content-type for extension or {@link #defaultMimeType} if mapping not found
+	 * @return content-type for extension or {@link #defaultMimeType} if mapping not found. If there is no default then <code>null</code>.
 	 */
 	public String getContentType(String filename) {
 		int lastDot = filename.lastIndexOf('.');
