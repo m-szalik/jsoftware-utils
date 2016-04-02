@@ -22,7 +22,7 @@ public class FixedSizeRollingListTest {
 	}
 
 	@Test
-	public void rollingTest() {
+	public void testRollingValues() {
 		assertEquals(Arrays.asList(1, 2), list);
 		list.add(3);
 		assertEquals(Arrays.asList(2, 3), list);
@@ -70,5 +70,30 @@ public class FixedSizeRollingListTest {
 		}
 		assertEquals(list, dst);
 	}
-	
+
+	@Test
+	public void testToArray() throws Exception {
+		Object[] ret = list.toArray();
+		Assert.assertArrayEquals(new Object[] { 1, 2 }, ret);
+	}
+
+	@Test
+	public void testToArrayGeneric() throws Exception {
+		Integer[] ret = list.toArray(new Integer[0]);
+		Assert.assertArrayEquals(new Integer[] { 1, 2 }, ret);
+	}
+
+	@Test
+	public void testHashcode() throws Exception {
+		int hc1 = list.hashCode();
+		int hc2 = Arrays.asList(1, 2).hashCode();
+		Assert.assertEquals(hc2, hc1);
+	}
+
+	@Test
+	public void testRemove() throws Exception {
+		Assert.assertEquals(2, list.size());
+		list.remove(1);
+		Assert.assertEquals(1, list.size());
+	}
 }

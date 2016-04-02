@@ -11,8 +11,6 @@ import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-/**
- */
 public class SimpleCacheTest {
     private Instant now;
     private SimpleCache<Object,Object> cache;
@@ -26,6 +24,15 @@ public class SimpleCacheTest {
                 return now;
             }
         };
+    }
+
+    @Test
+    public void testRemoveKey() throws Exception {
+        cache.put(1, "one");
+        cache.put(2, "two");
+        Assert.assertEquals(2, cache.size());
+        cache.remove(2);
+        Assert.assertEquals(1, cache.size());
     }
 
     @Test
