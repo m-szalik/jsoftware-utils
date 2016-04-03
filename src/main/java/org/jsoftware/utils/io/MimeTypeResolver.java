@@ -86,16 +86,20 @@ public class MimeTypeResolver implements Serializable {
 		String ct = map.get(filename.toLowerCase());
 		return ct == null ? defaultMimeType : ct; 
 	}
-		
-	
-	private void load(File file) {
+
+	/**
+	 * @param file file to load
+	 * @return true if loaded
+	 */
+	boolean load(File file) {
 		if (file.canRead()) {
             FileInputStream fis = null;
 			try {
                 fis = new FileInputStream(file);
-				load(fis);
+				return load(fis);
 			} catch (FileNotFoundException e) {
 				Logger.getLogger(getClass().getName()).log(Level.FINER, "Can not load mime types from " + file);
+				return false;
 			} finally {
                 if (fis != null) {
                     try {
@@ -105,10 +109,12 @@ public class MimeTypeResolver implements Serializable {
                     }
                 }
             }
-        }
+        } else {
+			return false;
+		}
 	}
 
-	private void load(InputStream inputStream) {
+	boolean load(InputStream inputStream) {
 		String s;
 		BufferedReader br = null;
 		try {
@@ -127,8 +133,10 @@ public class MimeTypeResolver implements Serializable {
 					}
 				}
 			}
+			return true;
 		} catch(IOException e) {
 			Logger.getLogger(getClass().getName()).log(Level.FINER, "Can not load mime types from " + inputStream);
+			return false;
 		} finally {
 			if (br != null) {
 				try {

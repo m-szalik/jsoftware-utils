@@ -16,7 +16,7 @@ public class FixedSizeRollingListTest {
 
 	@Before
 	public void setUp() throws Exception {
-		list = new FixedSizeRollingList<Integer>(2);
+		list = new FixedSizeRollingList<>(2);
 		list.add(1);
 		list.add(2);
 	}
@@ -95,5 +95,18 @@ public class FixedSizeRollingListTest {
 		Assert.assertEquals(2, list.size());
 		list.remove(1);
 		Assert.assertEquals(1, list.size());
+	}
+
+	@Test
+	public void testGet() throws Exception {
+		Integer i = list.get(1);
+		Assert.assertEquals(Integer.valueOf(2), i);
+	}
+
+	@Test
+	public void testRemoveObject() throws Exception {
+		Object o = Integer.valueOf(1);
+		list.remove(o);
+		assertEquals(Arrays.asList(2), list);
 	}
 }

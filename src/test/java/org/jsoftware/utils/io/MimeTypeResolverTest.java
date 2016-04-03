@@ -3,6 +3,13 @@ package org.jsoftware.utils.io;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+import org.mockito.Mockito;
+
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+
+import static org.mockito.Mockito.when;
 
 public class MimeTypeResolverTest {
 	private MimeTypeResolver resolver;
@@ -56,4 +63,17 @@ public class MimeTypeResolverTest {
 		String ct = resolver.getContentType("abc.oSt");
 		Assert.assertEquals("application/ost", ct);
 	}
+
+	@Test
+	public void testLoadFileNotFound() throws Exception {
+		Assert.assertFalse(resolver.load(new File("not.existing.file")));
+	}
+
+	@Test
+	public void testStreamIOException() throws Exception {
+		InputStream inputStream = Mockito.mock(InputStream.class);
+		when(inputStream.read()).thenThrow(new IOException());
+		Assert.assertFalse(resolver.load(inputStream));
+	}
+
 }
