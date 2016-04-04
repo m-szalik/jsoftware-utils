@@ -27,6 +27,15 @@ public class SimpleCacheTest {
     }
 
     @Test
+    public void testFetchNotExisting() throws Exception {
+        final Object rVal = new Object();
+        Object r0 = cache.fetch("key", () -> rVal);
+        Object r1 = cache.fetch("key", () -> new Object());
+        Assert.assertEquals(rVal, r0);
+        Assert.assertEquals(rVal, r1);
+    }
+
+    @Test
     public void testRemoveKey() throws Exception {
         cache.put(1, "one");
         cache.put(2, "two");

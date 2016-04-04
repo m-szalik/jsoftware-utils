@@ -98,7 +98,7 @@ public class FixedSizeRollingListTest {
 	}
 
 	@Test
-	public void testGet() throws Exception {
+	public void testGetValue() throws Exception {
 		Integer i = list.get(1);
 		Assert.assertEquals(Integer.valueOf(2), i);
 	}
@@ -108,5 +108,19 @@ public class FixedSizeRollingListTest {
 		Object o = Integer.valueOf(1);
 		list.remove(o);
 		assertEquals(Arrays.asList(2), list);
+	}
+
+	@Test
+	public void testListIterator() throws Exception {
+		Iterator<Integer> it = list.listIterator(1);
+		Integer value = it.next();
+		Assert.assertEquals(Integer.valueOf(2), value);
+		Assert.assertFalse(it.hasNext());
+	}
+
+	@Test
+	public void testSetValue() throws Exception {
+		list.set(1, 10);
+		Assert.assertEquals(Arrays.asList(1, 10), list);
 	}
 }
