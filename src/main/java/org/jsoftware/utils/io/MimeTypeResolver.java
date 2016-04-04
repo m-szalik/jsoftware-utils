@@ -98,8 +98,7 @@ public class MimeTypeResolver implements Serializable {
                 fis = new FileInputStream(file);
 				return load(fis);
 			} catch (FileNotFoundException e) {
-				Logger.getLogger(getClass().getName()).log(Level.FINER, "Can not load mime types from " + file);
-				return false;
+				throw new AssertionError("Shouldn't happened.", e);
 			} finally {
                 if (fis != null) {
                     try {
