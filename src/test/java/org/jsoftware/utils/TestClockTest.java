@@ -1,6 +1,5 @@
 package org.jsoftware.utils;
 
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -9,6 +8,9 @@ import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.temporal.ChronoUnit;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotEquals;
 
 public class TestClockTest {
     private TestClock clock;
@@ -23,7 +25,7 @@ public class TestClockTest {
         long t1 = clock.millis();
         Thread.sleep(2000);
         long t2 = clock.millis();
-        Assert.assertEquals(t1, t2);
+        assertEquals(t1, t2);
     }
 
     @Test
@@ -31,8 +33,8 @@ public class TestClockTest {
         Instant instant = Instant.now().plus(12, ChronoUnit.MINUTES);
         long t1 = clock.millis();
         clock.update(instant);
-        Assert.assertNotEquals(t1, clock.millis());
-        Assert.assertEquals(instant.toEpochMilli(), clock.millis());
+        assertNotEquals(t1, clock.millis());
+        assertEquals(instant.toEpochMilli(), clock.millis());
     }
 
     @Test
@@ -42,14 +44,14 @@ public class TestClockTest {
         LocalDateTime local1 = LocalDateTime.now(clock);
         LocalDateTime local2 = LocalDateTime.now(utcPlus4TestClock);
         LocalDateTime local1Normalized = local1.plus(4, ChronoUnit.HOURS);
-        Assert.assertEquals(local1Normalized, local2);
+        assertEquals(local1Normalized, local2);
     }
 
     @Test
     public void testTimeZoneSameZone() throws Exception {
         ZoneId zoneId = clock.getZone();
         Clock clock2 = clock.withZone(zoneId);
-        Assert.assertEquals(zoneId, clock2.getZone());
+        assertEquals(zoneId, clock2.getZone());
     }
 
     @Test(expected = IllegalArgumentException.class)

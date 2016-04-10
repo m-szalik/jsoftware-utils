@@ -1,7 +1,6 @@
 package org.jsoftware.utils;
 
 import org.junit.After;
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -13,6 +12,9 @@ import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReadWriteLock;
+
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 public class ConcurrentLockHolderByKeyTest {
 	private ConcurrentLockHolderByKey<ReadWriteLock> instance;
@@ -34,8 +36,8 @@ public class ConcurrentLockHolderByKeyTest {
 	@Test // TRUE
 	public void downgradingToReadLock() {
 		ReadWriteLock rwLock = instance.get("A");
-		Assert.assertTrue(rwLock.writeLock().tryLock());
-		Assert.assertTrue(rwLock.readLock().tryLock());
+		assertTrue(rwLock.writeLock().tryLock());
+		assertTrue(rwLock.readLock().tryLock());
 	}
 
 
@@ -43,7 +45,7 @@ public class ConcurrentLockHolderByKeyTest {
 	public void writeLockedTryRead() throws InterruptedException, ExecutionException {
 		ReadWriteLock rwLock = instance.get("A");
 		threadLock.tryLock(rwLock.writeLock());
-		Assert.assertFalse(rwLock.readLock().tryLock());
+		assertFalse(rwLock.readLock().tryLock());
 	}
 	
 
@@ -51,35 +53,35 @@ public class ConcurrentLockHolderByKeyTest {
 	public void readLockedTryWrite() throws InterruptedException, ExecutionException {
 		ReadWriteLock rwLock = instance.get("A");
 		threadLock.tryLock(rwLock.readLock());
-		Assert.assertFalse(rwLock.writeLock().tryLock());
+		assertFalse(rwLock.writeLock().tryLock());
 	}
 	
 	@Test // TRUE
 	public void readLockedTryRead() throws InterruptedException, ExecutionException {
 		ReadWriteLock rwLock = instance.get("A");
 		threadLock.tryLock(rwLock.readLock());
-		Assert.assertTrue(rwLock.readLock().tryLock());
+		assertTrue(rwLock.readLock().tryLock());
 	}
 	
 	@Test 
 	public void twiceTest() throws InterruptedException {
 		ReadWriteLock rwLock1 = instance.get("A");
 		ReadWriteLock rwLock2 = instance.get("A");
-		Assert.assertTrue(rwLock1 == rwLock2);
+		assertTrue(rwLock1 == rwLock2);
 	}
 	
 	@Test 
 	public void releaseByIdTest() throws InterruptedException {
 		ReadWriteLock rwLock1 = instance.get("A");
 		instance.release("A");
-		Assert.assertFalse(rwLock1 == instance.get("A"));
+		assertFalse(rwLock1 == instance.get("A"));
 	}
 	
 	@Test 
 	public void releaseByLock() throws InterruptedException {
 		ReadWriteLock rwLock1 = instance.get("A");
 		instance.release(rwLock1);
-		Assert.assertFalse(rwLock1 == instance.get("A"));
+		assertFalse(rwLock1 == instance.get("A"));
 	}
 	
 }
