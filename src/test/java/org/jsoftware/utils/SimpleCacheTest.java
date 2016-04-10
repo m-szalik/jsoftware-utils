@@ -116,7 +116,7 @@ public class SimpleCacheTest {
                 try {
                     Thread.sleep(500);
                 } catch (InterruptedException e) {
-                    throw new RuntimeException(e);
+                    throw new IllegalStateException(e);
                 }
                 return Thread.currentThread().getName();
             });

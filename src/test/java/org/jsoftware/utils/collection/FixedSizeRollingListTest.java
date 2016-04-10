@@ -1,6 +1,5 @@
 package org.jsoftware.utils.collection;
 
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -9,7 +8,10 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
+import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 public class FixedSizeRollingListTest {
 	private FixedSizeRollingList<Integer> list;
@@ -41,24 +43,24 @@ public class FixedSizeRollingListTest {
 
 	@Test
 	public void testIsEmpty() throws Exception {
-		Assert.assertFalse(list.isEmpty());
+		assertFalse(list.isEmpty());
 		list.clear();
-		Assert.assertTrue(list.isEmpty());
+		assertTrue(list.isEmpty());
 	}
 
 	@Test
 	public void testSize() throws Exception {
-		Assert.assertEquals(2, list.size());
+		assertEquals(2, list.size());
 		list.add(9);
-		Assert.assertEquals(2, list.size());
+		assertEquals(2, list.size());
 		list.clear();
-		Assert.assertEquals(0, list.size());
+		assertEquals(0, list.size());
 	}
 
 	@Test
 	public void testIndexOf() throws Exception {
 		int index = list.indexOf(2);
-		Assert.assertEquals(1, index);
+		assertEquals(1, index);
 	}
 
 	@Test
@@ -74,33 +76,33 @@ public class FixedSizeRollingListTest {
 	@Test
 	public void testToArray() throws Exception {
 		Object[] ret = list.toArray();
-		Assert.assertArrayEquals(new Object[] { 1, 2 }, ret);
+		assertArrayEquals(new Object[]{1, 2}, ret);
 	}
 
 	@Test
 	public void testToArrayGeneric() throws Exception {
 		Integer[] ret = list.toArray(new Integer[0]);
-		Assert.assertArrayEquals(new Integer[] { 1, 2 }, ret);
+		assertArrayEquals(new Integer[]{1, 2}, ret);
 	}
 
 	@Test
 	public void testHashcode() throws Exception {
 		int hc1 = list.hashCode();
 		int hc2 = Arrays.asList(1, 2).hashCode();
-		Assert.assertEquals(hc2, hc1);
+		assertEquals(hc2, hc1);
 	}
 
 	@Test
 	public void testRemove() throws Exception {
-		Assert.assertEquals(2, list.size());
+		assertEquals(2, list.size());
 		list.remove(1);
-		Assert.assertEquals(1, list.size());
+		assertEquals(1, list.size());
 	}
 
 	@Test
 	public void testGetValue() throws Exception {
 		Integer i = list.get(1);
-		Assert.assertEquals(Integer.valueOf(2), i);
+		assertEquals(Integer.valueOf(2), i);
 	}
 
 	@Test
@@ -114,13 +116,13 @@ public class FixedSizeRollingListTest {
 	public void testListIterator() throws Exception {
 		Iterator<Integer> it = list.listIterator(1);
 		Integer value = it.next();
-		Assert.assertEquals(Integer.valueOf(2), value);
-		Assert.assertFalse(it.hasNext());
+		assertEquals(Integer.valueOf(2), value);
+		assertFalse(it.hasNext());
 	}
 
 	@Test
 	public void testSetValue() throws Exception {
 		list.set(1, 10);
-		Assert.assertEquals(Arrays.asList(1, 10), list);
+		assertEquals(Arrays.asList(1, 10), list);
 	}
 }
