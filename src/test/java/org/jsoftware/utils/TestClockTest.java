@@ -11,6 +11,8 @@ import java.time.temporal.ChronoUnit;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
 public class TestClockTest {
     private TestClock clock;
@@ -59,4 +61,10 @@ public class TestClockTest {
         clock.update(null);
     }
 
+    @Test
+    public void testToString() throws Exception {
+        String str = clock.toString();
+        assertNotNull(str);
+        assertTrue("toString returned blank value", str.trim().length() > 0);
+    }
 }
