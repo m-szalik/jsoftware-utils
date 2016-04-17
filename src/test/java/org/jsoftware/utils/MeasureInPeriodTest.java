@@ -3,7 +3,6 @@ package org.jsoftware.utils;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.time.Clock;
 import java.util.concurrent.TimeUnit;
 
 import static org.junit.Assert.assertEquals;
@@ -12,11 +11,13 @@ import static org.junit.Assert.assertEquals;
  * @author szalik
  */
 public class MeasureInPeriodTest {
+    private TestClock clock;
     private MeasureInPeriod measureInPeriod;
 
     @Before
     public void setUp() throws Exception {
-        measureInPeriod = new MeasureInPeriod(Clock.systemUTC(), TimeUnit.SECONDS.toMillis(1));
+        clock = new TestClock();
+        measureInPeriod = new MeasureInPeriod(clock, TimeUnit.MINUTES.toMillis(1));
     }
 
     @Test
@@ -34,7 +35,20 @@ public class MeasureInPeriodTest {
     @Test
     public void testExpire() throws Exception {
         measureInPeriod.hit();
-        Thread.sleep(TimeUnit.SECONDS.toMillis(2));
+        clock.update(clock.instant().plusSeconds(70));
         assertEquals(0, measureInPeriod.get());
+    }
+
+    @Test
+    public void testFullWithCleanup() throws Exception {
+        for(int i=0; i<25; i++) {
+            measureInPeriod.hit();
+        }
+        clock.update(clock.instant().plusSeconds(30));
+        assertEquals(25, measureInPeriod.get());
+        measureInPeriod.hit();
+        measureInPeriod.hit();
+        clock.update(clock.instant().plusSeconds(40));
+        assertEquals(2, measureInPeriod.get());
     }
 }
