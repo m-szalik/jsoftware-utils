@@ -49,6 +49,25 @@ public class MeasureInPeriodTest {
         measureInPeriod.hit();
         measureInPeriod.hit();
         clock.update(clock.instant().plusSeconds(40));
-        assertEquals(2, measureInPeriod.get());
+        for(int i=0; i<25; i++) {
+            measureInPeriod.hit();
+        }
+        assertEquals(27, measureInPeriod.get());
+    }
+
+    @Test
+    public void testWithDefaultClock() throws Exception {
+        MeasureInPeriod measure = new MeasureInPeriod(TimeUnit.SECONDS.toMillis(20));
+        measure.hit();
+        measure.hit();
+        assertEquals(2, measure.get());
+    }
+
+    @Test
+    public void testClear() throws Exception {
+        measureInPeriod.hit(3);
+        assertEquals(3, measureInPeriod.get());
+        measureInPeriod.clear();
+        assertEquals(0, measureInPeriod.get());
     }
 }

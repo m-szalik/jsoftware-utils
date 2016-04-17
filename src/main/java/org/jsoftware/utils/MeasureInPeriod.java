@@ -12,7 +12,7 @@ import java.util.concurrent.locks.ReentrantReadWriteLock;
  * @author szalik
  */
 public class MeasureInPeriod {
-    private static final int CLEANUP_WHEN = 10; // cleanup once per X hits
+    private static final int CLEANUP_WHEN = 10; // cleanup once per X hits operations
     private final ReadWriteLock rwLock;
     private final Clock clock;
     private final long periodMillis;
@@ -43,17 +43,28 @@ public class MeasureInPeriod {
      * Report a hit
      */
     public void hit() {
-        Lock lock = rwLock.writeLock();
-        try {
-            lock.lock();
-            buffer.add(clock.millis());
+        long t = clock.millis();
+        writeLock(() -> {
+            buffer.add(t);
             cleanupCounter++;
             cleanup();
-        } finally {
-            lock.unlock();
-        }
+        });
     }
 
+    /**
+     * Multiple hits
+     * @param hits number of hits
+     */
+    public void hit(int hits) {
+        long t = clock.millis();
+        writeLock(() -> {
+            for(int i=0; i<hits; i++) {
+                buffer.add(t);
+            }
+            cleanupCounter++;
+            cleanup();
+        });
+    }
 
     /**
      * @return current hit rate
@@ -70,6 +81,30 @@ public class MeasureInPeriod {
                 }
             }
             return c;
+        } finally {
+            lock.unlock();
+        }
+    }
+
+    /**
+     * Reset measurement
+     */
+    public void reset() {
+        writeLock(buffer::clear);
+    }
+
+    /**
+     * @see #reset()
+     */
+    public void clear() {
+        reset();
+    }
+
+    private void writeLock(Runnable action) {
+        Lock lock = rwLock.writeLock();
+        try {
+            lock.lock();
+            action.run();
         } finally {
             lock.unlock();
         }
