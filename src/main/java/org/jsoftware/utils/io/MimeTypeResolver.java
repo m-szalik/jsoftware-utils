@@ -16,7 +16,10 @@ import java.util.logging.Logger;
 /**
  * Resolve mime type by file name or file extension
  * @author m-szalik
+ * @deprecated use java.nio.file.Files.probeContentType(Path)
+ * @see java.nio.file.Files.probeContentType(java.nio.file.Path)
  */
+@Deprecated
 public class MimeTypeResolver implements Serializable {
 	private static final long serialVersionUID = 1L;
 	private final String defaultMimeType;
