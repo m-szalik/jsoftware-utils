@@ -4,7 +4,7 @@
 
     <groupId>org.jsoftware</groupId>
     <artifactId>jsoftware-utils</artifactId>
-    <version>1.1-SNAPSHOT</version>
+    <version>1.1</version>
 
     <parent>
         <groupId>org.jsoftware</groupId>
@@ -46,6 +46,7 @@
         <url>https://github.com/m-szalik/jsoftware-utils.git</url>
         <connection>scm:git:git@github.com:m-szalik/jsoftware-utils.git</connection>
         <developerConnection>scm:git:git@github.com:m-szalik/jsoftware-utils.git</developerConnection>
+    <tag>jsoftware-utils-1.1</tag>
   </scm>
 
     <issueManagement>
