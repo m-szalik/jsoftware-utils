@@ -1,5 +1,6 @@
 package org.jsoftware.utils.time;
 
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -8,6 +9,7 @@ import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.temporal.ChronoUnit;
+import java.util.concurrent.TimeUnit;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
@@ -66,5 +68,44 @@ public class TestClockTest {
         String str = clock.toString();
         assertNotNull(str);
         assertTrue("toString returned blank value", str.trim().length() > 0);
+    }
+
+    @Test
+    public void testPlus10Minutes() throws Exception {
+        long t0 = clock.millis();
+        clock.plus(10, TimeUnit.MINUTES);
+        long t1 = clock.millis();
+        Assert.assertEquals(TimeUnit.MINUTES.toMillis(10), t1 - t0);
+    }
+
+    @Test
+    public void testPlus1000Millis() throws Exception {
+        long t0 = clock.millis();
+        clock.plus(1000L);
+        long t1 = clock.millis();
+        Assert.assertEquals(1000, t1 - t0);
+    }
+
+    @Test
+    public void testMinus1Day() throws Exception {
+        long t0 = clock.millis();
+        int n0 = clock.instant().getNano();
+        clock.plus(-1, ChronoUnit.DAYS);
+        long t1 = clock.millis();
+        int n1 = clock.instant().getNano();
+        Assert.assertEquals(TimeUnit.DAYS.toMillis(-1), t1 - t0);
+        Assert.assertEquals(n0, n1);
+    }
+
+
+    @Test
+    public void testPlus10Nanos() throws Exception {
+        long t0 = clock.millis();
+        int n0 = clock.instant().getNano();
+        clock.plus(10, TimeUnit.NANOSECONDS);
+        long t1 = clock.millis();
+        int n1 = clock.instant().getNano();
+        Assert.assertEquals(t1, t0);
+        Assert.assertEquals(10, n1 - n0);
     }
 }
