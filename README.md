@@ -11,7 +11,40 @@
  * Text manipulation utils
  * Time watch
  * Simple cache
+ * Retriable
+
 
 ## Requirements
  * Java 8 or newer
 
+## Usage
+
+### Retriable
+
+Simple:
+```
+Future<String> future = Retriable.doTry(
+    new Callable<String>() {
+        @Override
+        public String call() throws Exception {
+            // Job to be done.
+        },
+    5       // retry limit
+);
+
+```
+
+
+Advanced - custom wait function:
+```
+Future<String> future = Retriable.doTry(
+    new Callable<String>() {
+        @Override
+        public String call() throws Exception {
+            // Job to be done.
+        },
+    5,      // retry limit
+    RetriableDelayFunction.constFunction(1000)  // how long to wait between tries (1000ms)
+);
+
+```
