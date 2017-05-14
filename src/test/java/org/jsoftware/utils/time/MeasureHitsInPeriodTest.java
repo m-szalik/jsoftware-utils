@@ -10,54 +10,54 @@ import static org.junit.Assert.assertEquals;
 /**
  * @author m-szalik
  */
-public class MeasureInPeriodTest {
+public class MeasureHitsInPeriodTest {
     private TestClock clock;
-    private MeasureInPeriod measureInPeriod;
+    private MeasureHitsInPeriod measureHitsInPeriod;
 
     @Before
     public void setUp() throws Exception {
         clock = new TestClock();
-        measureInPeriod = new MeasureInPeriod(clock, TimeUnit.MINUTES.toMillis(1));
+        measureHitsInPeriod = new MeasureHitsInPeriod(clock, TimeUnit.MINUTES.toMillis(1));
     }
 
     @Test
     public void testClean() throws Exception {
-        assertEquals(0, measureInPeriod.get());
+        assertEquals(0, measureHitsInPeriod.get());
     }
 
     @Test
     public void testTwoHits() throws Exception {
-        measureInPeriod.hit();
-        measureInPeriod.hit();
-        assertEquals(2, measureInPeriod.get());
+        measureHitsInPeriod.hit();
+        measureHitsInPeriod.hit();
+        assertEquals(2, measureHitsInPeriod.get());
     }
 
     @Test
     public void testExpire() throws Exception {
-        measureInPeriod.hit();
+        measureHitsInPeriod.hit();
         clock.update(clock.instant().plusSeconds(70));
-        assertEquals(0, measureInPeriod.get());
+        assertEquals(0, measureHitsInPeriod.get());
     }
 
     @Test
     public void testFullWithCleanup() throws Exception {
         for(int i=0; i<25; i++) {
-            measureInPeriod.hit();
+            measureHitsInPeriod.hit();
         }
         clock.update(clock.instant().plusSeconds(30));
-        assertEquals(25, measureInPeriod.get());
-        measureInPeriod.hit();
-        measureInPeriod.hit();
+        assertEquals(25, measureHitsInPeriod.get());
+        measureHitsInPeriod.hit();
+        measureHitsInPeriod.hit();
         clock.update(clock.instant().plusSeconds(40));
         for(int i=0; i<25; i++) {
-            measureInPeriod.hit();
+            measureHitsInPeriod.hit();
         }
-        assertEquals(27, measureInPeriod.get());
+        assertEquals(27, measureHitsInPeriod.get());
     }
 
     @Test
     public void testWithDefaultClock() throws Exception {
-        MeasureInPeriod measure = new MeasureInPeriod(TimeUnit.SECONDS.toMillis(20));
+        MeasureHitsInPeriod measure = new MeasureHitsInPeriod(TimeUnit.SECONDS.toMillis(20));
         measure.hit();
         measure.hit();
         assertEquals(2, measure.get());
@@ -65,9 +65,9 @@ public class MeasureInPeriodTest {
 
     @Test
     public void testClear() throws Exception {
-        measureInPeriod.hit(3);
-        assertEquals(3, measureInPeriod.get());
-        measureInPeriod.clear();
-        assertEquals(0, measureInPeriod.get());
+        measureHitsInPeriod.hit(3);
+        assertEquals(3, measureHitsInPeriod.get());
+        measureHitsInPeriod.clear();
+        assertEquals(0, measureHitsInPeriod.get());
     }
 }

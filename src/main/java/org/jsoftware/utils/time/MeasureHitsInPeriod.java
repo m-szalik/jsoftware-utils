@@ -11,7 +11,7 @@ import java.util.concurrent.locks.ReentrantReadWriteLock;
  * Measure hits per period.
  * @author m-szalik
  */
-public class MeasureInPeriod {
+public class MeasureHitsInPeriod {
     private static final int CLEANUP_WHEN = 10; // cleanup once per X hits operations
     private final ReadWriteLock rwLock;
     private final Clock clock;
@@ -24,7 +24,7 @@ public class MeasureInPeriod {
      * @param clock clock
      * @param periodMillis period for measurement
      */
-    public MeasureInPeriod(Clock clock, long periodMillis) {
+    public MeasureHitsInPeriod(Clock clock, long periodMillis) {
         this.clock = clock;
         this.periodMillis = periodMillis;
         this.buffer = new LinkedList<>();
@@ -35,7 +35,7 @@ public class MeasureInPeriod {
      * Create measurement using default system clock
      * @param periodMillis period for measurement
      */
-    public MeasureInPeriod(long periodMillis) {
+    public MeasureHitsInPeriod(long periodMillis) {
         this(Clock.systemDefaultZone(), periodMillis);
     }
 
