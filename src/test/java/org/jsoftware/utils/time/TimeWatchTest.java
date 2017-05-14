@@ -1,4 +1,4 @@
-package org.jsoftware.utils;
+package org.jsoftware.utils.time;
 
 
 import org.junit.Before;

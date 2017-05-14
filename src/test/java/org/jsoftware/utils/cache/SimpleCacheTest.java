@@ -1,4 +1,4 @@
-package org.jsoftware.utils;
+package org.jsoftware.utils.cache;
 
 import org.hamcrest.CoreMatchers;
 import org.junit.Assert;
@@ -9,6 +9,7 @@ import java.time.Instant;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import static org.junit.Assert.assertEquals;
@@ -24,7 +25,7 @@ public class SimpleCacheTest {
     @Before
     public void setUp() throws Exception {
         now = Instant.now();
-        cache = new SimpleCache<Object, Object>(1000, 3) {
+        cache = new SimpleCache<Object, Object>(TimeUnit.SECONDS.toMillis(1), 3) {
             @Override
             protected Instant now() {
                 return now;

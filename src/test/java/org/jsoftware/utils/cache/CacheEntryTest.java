@@ -1,4 +1,4 @@
-package org.jsoftware.utils;
+package org.jsoftware.utils.cache;
 
 import org.junit.Test;
 
