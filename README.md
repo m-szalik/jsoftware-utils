@@ -5,7 +5,7 @@
 [![Dependency Status](https://www.versioneye.com/user/projects/56e2b440df573d003a5f5bf5/badge.svg?style=flat)](https://www.versioneye.com/user/projects/56e2b440df573d003a5f5bf5)
 [![Codacy Badge](https://api.codacy.com/project/badge/grade/c45e6725b6b7477ea8e041f3aefd5bc5)](https://www.codacy.com/app/szalik/jsoftware-utils)
 
-## Common tools and helpers like:
+## Common tools and helpers:
  * Fixed size value containers
    * [FixedSizeRollingContainer](docs/FixedSizeRollingContainer.md) - Container that always holds x number of elements. It uses supplier to fill the container.
    * [FixedSizeRollingList](docs/FixedSizeRollingList.md) - Remove first element if list capacity is exceeded.
@@ -22,6 +22,15 @@
 
 ## Requirements
  * Java 8 or newer
+
+## Maven artifact
+```xml
+<dependency>
+    <groupId>org.jsoftware</groupId>
+    <artifactId>jsoftware-utils</artifactId>
+    <version>1.2</version>
+</dependency>
+```
 
 ## License
 
