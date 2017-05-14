@@ -6,7 +6,7 @@ import java.util.regex.Pattern;
 
 /**
  *
- * @author szalik
+ * @author m-szalik
  */
 public class RegexReplacer {
     private final Pattern pattern;

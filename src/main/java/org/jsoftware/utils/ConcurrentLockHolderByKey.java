@@ -9,7 +9,7 @@ import java.util.concurrent.locks.ReentrantReadWriteLock;
 /**
  * Holds lock for {@link Serializable}'s <code>id</code>.
  * <p>For new instance use static factory methods.</p> 
- * @author szalik
+ * @author m-szalik
  * @param <L> Object to hold
  */
 @SuppressWarnings({ "rawtypes", "unchecked" })

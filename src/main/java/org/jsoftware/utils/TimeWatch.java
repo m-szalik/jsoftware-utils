@@ -5,7 +5,7 @@ import java.util.concurrent.TimeUnit;
 
 /**
  * Allows to measure time (millis) of an action.
- * @author szalik
+ * @author m-szalik
  */
 public final class TimeWatch {
     private final Clock clock;

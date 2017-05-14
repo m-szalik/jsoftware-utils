@@ -5,7 +5,7 @@ import java.util.concurrent.locks.ReentrantLock;
 
 /**
  * Holds an Object
- * @author szalik
+ * @author m-szalik
  */
 public final class Holder<T> {
     private final Lock writeLock = new ReentrantLock();

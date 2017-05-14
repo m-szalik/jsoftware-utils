@@ -11,7 +11,7 @@ import java.util.function.Supplier;
  * Elements can be removed by {@link #shift()} method.
  * <p>This is not thread-safe class.</p>
  * @param <T> the type of elements in this container
- * @author szalik
+ * @author m-szalik
  */
 public class FixedSizeRollingContainer<T> implements Serializable {
 	private static final long serialVersionUID = -3777873725549224549L;

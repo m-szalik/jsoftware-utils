@@ -15,7 +15,7 @@ import java.util.logging.Logger;
 
 /**
  * Resolve mime type by file name or file extension
- * @author szalik
+ * @author m-szalik
  */
 public class MimeTypeResolver implements Serializable {
 	private static final long serialVersionUID = 1L;

@@ -2,7 +2,7 @@ package org.jsoftware.utils;
 
 /**
  * Operation is not yet implemented.
- * @author szalik
+ * @author m-szalik
  */
 public class NotImplementedException extends RuntimeException {
 	static final String DEFAULT_MESSAGE = "Not implemented";

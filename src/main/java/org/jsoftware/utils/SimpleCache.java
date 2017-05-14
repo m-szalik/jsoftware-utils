@@ -14,7 +14,7 @@ import java.util.stream.Collectors;
 
 /**
  * Simple cache based on LinkedHashMap
- * @author szalik
+ * @author m-szalik
  */
 public class SimpleCache<K,V> implements Map<K,V> {
     private final long timeoutMillis;

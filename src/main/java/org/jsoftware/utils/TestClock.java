@@ -6,7 +6,7 @@ import java.time.ZoneId;
 
 /**
  * Clock useful for testing. Returned time is modified only after #update(Instant) method is called.
- * @author szalik
+ * @author m-szalik
  */
 public class TestClock extends Clock {
     private final ZoneId zoneId;

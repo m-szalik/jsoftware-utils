@@ -9,7 +9,7 @@ import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 /**
  * Measure hits per period.
- * @author szalik
+ * @author m-szalik
  */
 public class MeasureInPeriod {
     private static final int CLEANUP_WHEN = 10; // cleanup once per X hits operations
