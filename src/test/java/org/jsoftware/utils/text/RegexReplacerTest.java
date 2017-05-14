@@ -55,6 +55,10 @@ public class RegexReplacerTest {
         Assert.assertEquals("afoobarfoo", result);
     }
 
-
-
+    @Test
+    public void testUperCase() throws Exception {
+        RegexReplacer regexReplacer = new RegexReplacer(Pattern.compile("\\s"));
+        String result = regexReplacer.replaceGroupsAll("Hello World! How are you?", (str) -> "__");
+        Assert.assertEquals("Hello__World!__How__are__you?", result);
+    }
 }

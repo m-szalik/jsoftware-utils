@@ -5,14 +5,14 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
- *
+ * Replace regexp pattern using callback function.
  * @author m-szalik
  */
 public class RegexReplacer {
     private final Pattern pattern;
 
     /**
-     * @param pattern patter to be used
+     * @param pattern pattern to be used for text searching
      */
     public RegexReplacer(Pattern pattern) {
         this.pattern = pattern;
@@ -21,7 +21,7 @@ public class RegexReplacer {
     /**
      * Replace all regex groups
      * @param text search in string
-     * @param replaceFunction replace function
+     * @param replaceFunction replace function (in - text found, out - replacement)
      * @return replacement result
      */
     public String replaceGroupsAll(CharSequence text, Function<String,CharSequence> replaceFunction) {
