@@ -6,45 +6,23 @@
 [![Codacy Badge](https://api.codacy.com/project/badge/grade/c45e6725b6b7477ea8e041f3aefd5bc5)](https://www.codacy.com/app/szalik/jsoftware-utils)
 
 ## Common tools and helpers like:
- * Fixed size lists
- * MimeType resolver
+ * Fixed size value containers
+   * [FixedSizeRollingContainer](docs/FixedSizeRollingContainer.md) - Container that always holds x number of elements. It uses supplier to fill the container.
+   * [FixedSizeRollingList](docs/FixedSizeRollingList.md) - Remove first element if list capacity is exceeded.
+ * [MimeType resolver](docs/MimeTypeResolver.md) - resolve a file mime type (deprecated)
  * Text manipulation utils
- * Time watch
- * Simple cache
- * Retriable
+   * [RegexReplacer](docs/RegexReplacer.md) - Replace regexp pattern using callback function.
+ * Time measurement
+   * [TimeWatch](docs/TimeWatch.md) - Measure time of an operation.
+   * [MeasureHitsInPeriod](docs/MeasureHitsInPeriod.md) - Measure amount of hits in defined period.
+   * [TestClock](docs/TestClock.md) - A java.time.Clock that ticks when it's required.
+ * [SimpleCache](docs/SimpleCache.md) - Very simple caching.
+ * [Retriable](docs/Retriable.md) - Retriable is an simple library to retry a code block if an exception has been raised.
 
 
 ## Requirements
  * Java 8 or newer
 
-## Usage
+## License
 
-### Retriable
-
-Simple:
-```
-Future<String> future = Retriable.doTry(
-    new Callable<String>() {
-        @Override
-        public String call() throws Exception {
-            // Job to be done.
-        },
-    5       // retry limit
-);
-
-```
-
-
-Advanced - custom wait function:
-```
-Future<String> future = Retriable.doTry(
-    new Callable<String>() {
-        @Override
-        public String call() throws Exception {
-            // Job to be done.
-        },
-    5,      // retry limit
-    RetriableDelayFunction.constFunction(1000)  // how long to wait between tries (1000ms)
-);
-
-```
+Apache License 2.0
