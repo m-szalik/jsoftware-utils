@@ -8,7 +8,7 @@ import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 /**
- * Measure hits per period.
+ * Measure hits in defined period of time.
  * @author m-szalik
  */
 public class MeasureHitsInPeriod {
