@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.ListIterator;
 
 /**
- * {@link List} that always holds max <tt>fixedSize</tt> of elements <tt>E</tt> if more elements are added the first one is automatically removed from {@link List}.
+ * {@link List} that always holds at max <tt>fixedSize</tt> of elements <tt>E</tt> if more elements are added the first one is automatically removed from {@link List}.
  * @author m-szalik
  * @param <E> list elements
  * <p>This class is not thread-safe.</p>

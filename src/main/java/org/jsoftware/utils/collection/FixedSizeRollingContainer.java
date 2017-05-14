@@ -7,7 +7,7 @@ import java.util.function.Supplier;
 
 
 /**
- * Container that always holds <tt>size</tt> number of elements or less.
+ * Container that always holds <tt>size</tt> number of elements. It uses supplier to fill the container.
  * Elements can be removed by {@link #shift()} method.
  * <p>This class is not thread-safe.</p>
  * @param <T> the type of elements in this container

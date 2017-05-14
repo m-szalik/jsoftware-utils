@@ -16,7 +16,7 @@ import java.util.logging.Logger;
 /**
  * Resolve mime type by file name or file extension
  * @author m-szalik
- * @deprecated use java.nio.file.Files.probeContentType(Path)
+ * @deprecated use java.nio.file.Files.probeContentType(Path) instead
  * @see java.nio.file.Files.probeContentType(java.nio.file.Path)
  */
 @Deprecated
