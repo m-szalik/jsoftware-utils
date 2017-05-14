@@ -18,7 +18,7 @@ import java.util.stream.Collectors;
  * Simple cache based on LinkedHashMap
  * @author m-szalik
  */
-public class SimpleCache<K,V> implements Map<K,V> {
+public class SimpleCache<K,V> implements Cache<K,V> {
     private final long timeoutMillis;
     private final SimpleCacheMap<K,CacheEntry<V>> cacheMap;
 
@@ -103,12 +103,7 @@ public class SimpleCache<K,V> implements Map<K,V> {
         throw new NotImplementedException();
     }
 
-    /**
-     * Thread-safe method fetching cache object
-     * @param key cache key
-     * @param supplier object supplier
-     * @return object form cache or produced by supplier
-     */
+    @Override
     public V fetch(K key, Supplier<V> supplier) {
         CacheEntry<V> ce = createOrGetEntry(key);
         if (isValid(ce)) {
