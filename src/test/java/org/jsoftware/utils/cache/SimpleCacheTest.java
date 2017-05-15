@@ -8,6 +8,7 @@ import org.junit.Test;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
@@ -170,6 +171,27 @@ public class SimpleCacheTest {
         Assert.assertEquals(1, cache.get("key"));
         now = now.plus(3, ChronoUnit.MINUTES);
         Assert.assertNull(cache.get("key"));
+    }
+
+    @Test
+    public void testValuesKeysAndEntrySet() throws Exception {
+        LinkedHashMap<String,Integer> map = new LinkedHashMap<>();
+        map.put("key1", 1);
+        map.put("key2", 2);
+        map.put("key3", 3);
+        cache.put("key1", 1);
+        now = now.plus(500, ChronoUnit.MILLIS);
+        cache.put("key2", 2);
+        cache.put("key3", 3);
+        Assert.assertArrayEquals(map.values().toArray(), cache.values().toArray());
+        Assert.assertArrayEquals(map.keySet().toArray(), cache.keySet().toArray());
+        Assert.assertArrayEquals(map.entrySet().toArray(), cache.entrySet().toArray());
+
+        now = now.plus(600, ChronoUnit.MILLIS);
+        map.remove("key1");
+        Assert.assertArrayEquals(map.values().toArray(), cache.values().toArray());
+        Assert.assertArrayEquals(map.keySet().toArray(), cache.keySet().toArray());
+        Assert.assertArrayEquals(map.entrySet().toArray(), cache.entrySet().toArray());
     }
 
 }

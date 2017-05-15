@@ -1,9 +1,8 @@
 package org.jsoftware.utils.cache;
 
 
-import org.jsoftware.utils.NotImplementedException;
-
 import java.time.Instant;
+import java.util.AbstractMap;
 import java.util.Collection;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -90,17 +89,29 @@ public class SimpleCache<K,V> implements Cache<K,V> {
 
     @Override
     public Set<K> keySet() {
-        return cacheMap.keySet();
+        return cacheMap.entrySet()
+                .stream()
+                .filter((e) -> isValid(e.getValue()))
+                .map(e -> e.getKey())
+                .collect(Collectors.toSet());
     }
 
     @Override
     public Collection<V> values() {
-        return cacheMap.values().stream().map(ce -> ce.getValue()).collect(Collectors.toList());
+        return cacheMap.values()
+                .stream()
+                .filter((ce) -> isValid(ce))
+                .map(ce -> ce.getValue())
+                .collect(Collectors.toList());
     }
 
     @Override
     public Set<Entry<K, V>> entrySet() {
-        throw new NotImplementedException();
+        return cacheMap.entrySet()
+                .stream()
+                .filter((e) -> isValid(e.getValue()))
+                .map(e -> new AbstractMap.SimpleImmutableEntry<>(e.getKey(), e.getValue().getValue()))
+                .collect(Collectors.toSet());
     }
 
     @Override
