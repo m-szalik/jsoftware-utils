@@ -5,6 +5,9 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.util.LinkedList;
+import java.util.List;
+
 public class LRUMapTest {
     private LRUMap<String, Integer> map;
 
@@ -46,5 +49,20 @@ public class LRUMapTest {
         Assert.assertEquals(2, map.size());
         map.clear();
         Assert.assertEquals(0, map.size());
+    }
+
+    @Test(timeout = 100L)
+    public void testPerformance() throws Exception {
+        List<Integer> found = new LinkedList<>();
+        for(int i=0; i<10000; i++) {
+            map.put(Integer.toString(i), i);
+        }
+        for(int i=10000; i>0; i--) {
+            Integer v = map.get(Integer.toString(i));
+            if (v != null) {
+                found.add(v);
+            }
+        }
+        Assert.assertArrayEquals(new Integer[] {9999, 9998, 9997}, found.toArray());
     }
 }
