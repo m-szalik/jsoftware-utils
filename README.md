@@ -29,11 +29,11 @@
 <dependency>
     <groupId>org.jsoftware</groupId>
     <artifactId>jsoftware-utils</artifactId>
-    <version>1.2</version>
+    <version>1.3</version>
 </dependency>
 ```
 ```groovy
-compile 'org.jsoftware:jsoftware-utils:1.2'
+compile 'org.jsoftware:jsoftware-utils:1.3'
 ```
 ## License
 
