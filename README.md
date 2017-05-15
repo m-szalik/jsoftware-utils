@@ -23,7 +23,8 @@
 ## Requirements
  * Java 8 or newer
 
-## Maven artifact
+## Maven / Gradle artifact
+[maven central](https://search.maven.org/#search%7Cga%7C1%7Ca%3A%22jsoftware-utils%22)
 ```xml
 <dependency>
     <groupId>org.jsoftware</groupId>
@@ -31,7 +32,9 @@
     <version>1.2</version>
 </dependency>
 ```
-
+```groovy
+compile 'org.jsoftware:jsoftware-utils:1.2'
+```
 ## License
 
 Apache License 2.0
