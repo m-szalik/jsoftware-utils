@@ -9,7 +9,8 @@
  * Fixed size value containers
    * [FixedSizeRollingContainer](docs/FixedSizeRollingContainer.md) - Container that always holds x number of elements. It uses supplier to fill the container.
    * [FixedSizeRollingList](docs/FixedSizeRollingList.md) - Remove first element if list capacity is exceeded.
- * [MimeType resolver](docs/MimeTypeResolver.md) - resolve a file mime type (deprecated)
+   * LRUMap - Map that keeps limited number of recently accessed elements.
+ * [MimeType resolver](docs/MimeTypeResolver.md) - resolve a file mime type (deprecated).
  * Text manipulation utils
    * [RegexReplacer](docs/RegexReplacer.md) - Replace regexp pattern using callback function.
  * Time measurement

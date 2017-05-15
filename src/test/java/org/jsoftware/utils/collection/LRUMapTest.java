@@ -34,5 +34,17 @@ public class LRUMapTest {
         map.put("4", 4);
         Assert.assertArrayEquals(new String[] {"2", "3", "4"}, map.keySet().toArray());
         Assert.assertArrayEquals(new Integer[] {2, 3, 4}, map.values().toArray());
+        map.get("2");
+        map.put("5", 5);
+        Assert.assertArrayEquals(new String[] {"2", "4", "5"}, map.keySet().toArray());
+    }
+
+    @Test
+    public void testClear() throws Exception {
+        map.put("1", 1);
+        map.put("2", 2);
+        Assert.assertEquals(2, map.size());
+        map.clear();
+        Assert.assertEquals(0, map.size());
     }
 }
