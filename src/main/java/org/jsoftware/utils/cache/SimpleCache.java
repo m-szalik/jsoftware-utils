@@ -1,10 +1,11 @@
 package org.jsoftware.utils.cache;
 
 
+import org.jsoftware.utils.collection.LRUMap;
+
 import java.time.Instant;
 import java.util.AbstractMap;
 import java.util.Collection;
-import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.locks.Lock;
@@ -19,7 +20,7 @@ import java.util.stream.Collectors;
  */
 public class SimpleCache<K,V> implements Cache<K,V> {
     private final long timeoutMillis;
-    private final SimpleCacheMap<K,CacheEntry<V>> cacheMap;
+    private final LRUMap<K,CacheEntry<V>> cacheMap;
 
     /**
      * @param timeoutMillis cache ttl im milliseconds
@@ -27,7 +28,7 @@ public class SimpleCache<K,V> implements Cache<K,V> {
      */
     public SimpleCache(long timeoutMillis, int cacheSize) {
         this.timeoutMillis = timeoutMillis;
-        this.cacheMap = new SimpleCacheMap<>(cacheSize);
+        this.cacheMap = new LRUMap<>(cacheSize);
     }
 
     @Override
@@ -208,13 +209,3 @@ class CacheEntry<V> {
     }
 }
 
-class SimpleCacheMap<K,V> extends LinkedHashMap<K,V> {
-    private final int cacheSize;
-
-    SimpleCacheMap(int cacheSize) {this.cacheSize = cacheSize;}
-
-    @Override
-    protected boolean removeEldestEntry(Map.Entry eldest) {
-        return this.size() > cacheSize;
-    }
-}
