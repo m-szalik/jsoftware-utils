@@ -6,6 +6,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.time.Instant;
+import java.time.temporal.ChronoUnit;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
@@ -161,4 +162,14 @@ public class SimpleCacheTest {
         Assert.assertThat(keys, CoreMatchers.hasItem(3));
         Assert.assertThat(keys, CoreMatchers.hasItem(2));
     }
+
+    @Test
+    public void testExpire() throws Exception {
+        Assert.assertNull(cache.get("key"));
+        cache.put("key", 1);
+        Assert.assertEquals(1, cache.get("key"));
+        now = now.plus(3, ChronoUnit.MINUTES);
+        Assert.assertNull(cache.get("key"));
+    }
+
 }
