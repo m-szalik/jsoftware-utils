@@ -7,7 +7,14 @@ package org.jsoftware.utils.chain;
  * @param <C> invocation context type
  * <p>Example:
  *    <code>
- *
+ * class MyChainCommand implements ChainCommand<Context> {
+ *  @Override
+ *  public void execute(Context context, DoChain<Context> doChain) throws Exception {
+ *   // do something before
+ *   doChain.doContinue(context); // execute successors
+ *   // do something after
+ *  }
+ *}
  *    </code>
  * </p>
  */
