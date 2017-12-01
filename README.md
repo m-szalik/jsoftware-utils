@@ -19,7 +19,7 @@
    * [TestClock](docs/TestClock.md) - A java.time.Clock that ticks when it's required.
  * [SimpleCache](docs/SimpleCache.md) - Very simple caching.
  * [Retriable](docs/Retriable.md) - Retriable is an simple library to retry a code block if an exception has been raised.
-
+ * Chain responsibility pattern implementation.
 
 ## Requirements
  * Java 8 or newer
